@@ -13,7 +13,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         //disable csrf
         $middleware->validateCsrfTokens(except: [
-            'stripe/*',
+            'encode',  
+            'decode',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
