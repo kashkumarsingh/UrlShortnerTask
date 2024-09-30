@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Cache; //cache for better in-memory
 
 class UrlShortnerController extends Controller
 {
     private $urlKeyPrefix = 'url:';  // Prefix for cache keys
     private $shortUrlBase = 'http://short.est/'; // Base URL for short URLs
     //private $urlStore = []; // In-memory storage for URLs
+
 
     public function encode(Request $request)
     {
