@@ -13,11 +13,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         //disable csrf
         $middleware->validateCsrfTokens(except: [
-            // Exclude the /encode and /decode endpoints
-            'encode',    // This is the route name; adjust if you have a specific prefix
-            'decode',    // This is the route name; adjust if you have a specific prefix
-            // If you have URL patterns, you can also specify them
-            'stripe/*',
+            'encode',  
+            'decode',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
