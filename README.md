@@ -1,66 +1,120 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Task
+Create a URL shortening service where you enter a URL such as https://www.thisisalongdomain.com/with/some/parameters?and=here_too and it returns a short URL such as http://short.est/GeAi9K.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Tasks:
 
-## About Laravel
+Two endpoints are required:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+/encode - Encodes a URL to a shortened URL
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+/decode - Decodes a shortened URL to its original URL
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Both endpoints should return JSON. There is no restriction on how your encode/decode algorithm should work. You just need to make sure that a URL can be encoded to a short URL and the short URL can be decoded to the original URL.
 
-## Learning Laravel
+You do not need to persist short URLs if you don't need to you can keep them in memory. Provide detailed instructions on how to run your assignment in a separate markdown file or readme.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+# URL Shortening Service
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+This project implements a simple URL shortening service using Laravel. 
+The service allows users to encode a long URL into a shorter version and decode the shortened URL back to the original URL.
 
-## Laravel Sponsors
+## Requirements
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP >= 8.1
+- Composer
+- Laravel 11.x
+- A web server (Apache/Nginx) or built-in PHP server (xampp or wamp)
+## Installation
 
-### Premium Partners
+Follow these steps to set up the URL shortening service on your local environment:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+- Navigate into the project directory: cd urlshortnertask
+- Install Composer (assuming comopser is already installed in the machine) Dependencies : composer install or you can use this command composer create-project --prefer-dist laravel/laravel urlshortnertask
+- Environment Setup : Copy the .env.example file to create your .env file. This file contains the environment configuration for your Laravel application:cp .env.example .env
+- Generate the application key:php artisan key:generate
+- Running the Application: php artisan serve By default, the application will be accessible at http://localhost:8000.
 
-## Contributing
+## Create the Controller
+- To create the controller for handling URL encoding and decoding, run the following command: php artisan make:controller UrlShortnerController
+- This command will create a new controller file located at (app/Http/Controllers/UrlShortnerController.php). 
+- You can then add the encoding and decoding logic to this controller.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Define Routes
+Open the routes file at routes/web.php  and add the following routes for your URL shortening service:
+```use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UrlShortnerController;
 
-## Code of Conduct
+Route::get('/', function () {
+return response()->json(['message' => 'Welcome to the URL Shortener API']);
+});
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Route::post('/encode', [UrlShortnerController::class, 'encode']);
+Route::post('/decode', [UrlShortnerController::class, 'decode']);
 
-## Security Vulnerabilities
+```
+## API Endpoints
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Encode URL
 
+- Endpoint: POST /encode
+- Request : {
+  "url": "https://www.thisisalongdomain.com/with/some/parameters?and=here_too"
+  }
+- Response should be something like this : {
+  "short_url": "http://short.est/GeAi9K"
+  }
+- Validation : The url field is required and must be a valid URL
+
+
+## Decode URL
+- Endpoint: POST /decode
+- Request: {
+  "short_url": "http://short.est/GeAi9K"
+  }
+- Response should be something like this : {
+  "original_url": "https://www.thisisalongdomain.com/with/some/parameters?and=here_too"
+  }
+- Validation : The short_url field is required and must be a valid URL.
+
+
+
+## Running Tests
+- Create a test file using following command : php artisan make:test UrlShortnerTest
+- To run the tests for the application, execute the following command: php artisan test
+- This will run all the feature and unit tests defined in the tests directory (look in project_directory/tests/Feature/UrlShortnerTest.php). Ensure all tests pass before submitting your assignment.
+
+
+## Testing with Postman
+
+- Step 1: Open Postman
+- Step 2: Create a New Request
+  - Click on the New button or select Request from the sidebar.
+  - Name your request and choose a collection (optional).
+  - Click Save.
+- Step 3: Set Up Encode Request
+  - Change the request type to POST.
+  - Change the request type to POST.
+  - Go to the Body tab and select raw. Choose JSON from the dropdown.
+  - Enter the following JSON in the body:
+  ```{
+    "url": "https://www.thisisalongdomain.com/with/some/parameters?and=here_too"
+    }
+    ```
+- Click Send. You should receive a response with a shortened URL.
+- Step 4: Set Up Decode Request
+  - Create another request.
+  - Change the request type to POST.
+  - Enter the URL: http://localhost:8000/decode.
+  - In the Body tab, select raw and choose JSON.
+  - Enter the following JSON in the body:
+  ```
+  { "short_url": "http://short.est/GeAi9K"}
+    ```
+- Click Send. You should receive a response with the original URL.
+
+
+# Important Notes
+- This implementation does not persist the URLs in a database; it stores them in memory.
 ## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-source and available under the MIT License.
